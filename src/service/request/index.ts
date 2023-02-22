@@ -2,7 +2,7 @@
  * @Author: xiaoxinYy 3037686283@qq.com
  * @Date: 2023-02-19 20:49:19
  * @LastEditors: xiaoxinYy 3037686283@qq.com
- * @LastEditTime: 2023-02-21 14:03:45
+ * @LastEditTime: 2023-02-22 13:55:32
  * @FilePath: \manager_vue3\manager_-system\src\service\request\index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -47,7 +47,7 @@ class CrayonRequest {
     // 添加所有的实例都有的拦截器
     this.instance.interceptors.request.use(
       config => {
-        console.log('All instance Obj have this interceptor')
+        // console.log('All instance Obj have this interceptor')
         if (this.showLoading) {
           this.loading = ElLoading.service({
             lock: true,
@@ -64,7 +64,7 @@ class CrayonRequest {
 
     this.instance.interceptors.response.use(
       res => {
-        console.log('All instance Obj have this interceptor')
+        // console.log('All instance Obj have this interceptor')
         this.loading?.close()
         return res.data
       },
@@ -88,7 +88,7 @@ class CrayonRequest {
       // 判断是否需要显示loading
       if (config.showLoading === false) {
         // 先执行这里 然后在执行所有实例都有的拦截器
-        console.log('test execution sequence')
+        // console.log('test execution sequence')
 
         this.showLoading = false
       }
