@@ -2,7 +2,7 @@
  * @Author: xiaoxinYy 3037686283@qq.com
  * @Date: 2023-02-21 18:56:30
  * @LastEditors: xiaoxinYy 3037686283@qq.com
- * @LastEditTime: 2023-02-22 14:15:02
+ * @LastEditTime: 2023-02-23 10:03:55
  * @FilePath: \manager_vue3\manager_-system\src\store\login\login.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -39,6 +39,10 @@ const loginModule: Module<ILoginState, IRootState> = {
     },
     changeUserMenus (state, userMenus: any) {
       state.userMenus = userMenus
+
+      // userMenus => routes
+
+      // 将routes => router.main.children
     }
   },
   actions: {
