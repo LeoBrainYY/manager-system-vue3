@@ -2,7 +2,7 @@
  * @Author: xiaoxinYy 3037686283@qq.com
  * @Date: 2023-02-22 14:53:09
  * @LastEditors: xiaoxinYy 3037686283@qq.com
- * @LastEditTime: 2023-02-22 21:54:02
+ * @LastEditTime: 2023-02-23 13:24:11
  * @FilePath: \manager_vue3\manager_-system\src\components\nav-menu\src\nav-menu.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -31,7 +31,7 @@
             </template>
             <!-- 遍历里面的item -->
             <template v-for="subitem in item.children" :key="subitem.id">
-              <el-menu-item :index="subitem.id + ''">
+              <el-menu-item :index="subitem.id + ''" @click="handleMenuItemClick(subitem)">
                 <i v-if="subitem.icon" :class="subitem.icon"></i>
                 <span>{{ subitem.name }}</span>
               </el-menu-item>
@@ -53,6 +53,7 @@
 <script lang='ts'>
 import { defineComponent, computed } from 'vue'
 import { useStore } from '@/store'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   props: {
@@ -66,8 +67,18 @@ export default defineComponent({
     // 通过vuex获取菜单
     const userMenus = computed(() => store.state.login.userMenus)
 
+    const router = useRouter()
+
+    const handleMenuItemClick = (item: any) => {
+      console.log(item)
+      router.push({
+        path: item.url ?? '/not-found'
+      })
+    }
+
     return {
-      userMenus
+      userMenus,
+      handleMenuItemClick
     }
   }
 })
