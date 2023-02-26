@@ -1,8 +1,8 @@
 /*
  * @Author: xiaoxinYy 3037686283@qq.com
  * @Date: 2023-02-21 18:56:30
- * @LastEditors: xiaoxinYy 3037686283@qq.com
- * @LastEditTime: 2023-02-23 13:20:51
+ * @LastEditors: Crayon 3037686283@qq.com
+ * @LastEditTime: 2023-02-26 21:38:46
  * @FilePath: \manager_vue3\manager_-system\src\store\login\login.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -47,6 +47,7 @@ const loginModule: Module<ILoginState, IRootState> = {
 
       routes.forEach(item => {
         // 将routes => router.main.children
+        // 注册(添加)路由
         router.addRoute('main', item)
       })
     }
