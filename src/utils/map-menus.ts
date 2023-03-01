@@ -1,13 +1,19 @@
 /*
  * @Author: xiaoxinYy 3037686283@qq.com
  * @Date: 2023-02-23 10:05:27
- * @LastEditors: xiaoxinYy 3037686283@qq.com
- * @LastEditTime: 2023-02-23 13:16:38
+ * @LastEditors: Crayon 3037686283@qq.com
+ * @LastEditTime: 2023-03-01 18:14:04
  * @FilePath: \manager_vue3\manager_-system\src\utils\map-menus.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
+import { IBreadcrumb } from '@/base-ui/breadcrumb'
 import { RouteRecordRaw } from 'vue-router'
 
+// 保留第一次循环下来的菜单url
+// 为了当url只有/main时 让其匹配到到第一个页面
+let firstMenu: any = null
+
+// 处理动态路由 根据后端返回的url菜单注册相对应路由
 export function mapMenusToRoutes (userMenus: any[]): RouteRecordRaw[] {
   const routes: RouteRecordRaw[] = []
 
@@ -50,6 +56,9 @@ export function mapMenusToRoutes (userMenus: any[]): RouteRecordRaw[] {
           return item.path === menu.url
         })
         if (route) routes.push(route)
+        if (!firstMenu) {
+          firstMenu = menu
+        }
       } else {
         _recurseGetRoute(menu.children)
       }
@@ -60,3 +69,44 @@ export function mapMenusToRoutes (userMenus: any[]): RouteRecordRaw[] {
 
   return routes
 }
+
+// 面包屑处理
+export function pathMapToBreadCrumb (userMenus: any[], currentPath: string) {
+  const  breadcrumbs: IBreadcrumb[] = []
+
+  for (const menu of userMenus) {
+    if (menu.type === 1) {
+      // menu.children如果为空 对空数组进行遍历
+      const getMenu = pathMapToMenu(menu.children ?? [], currentPath)
+      if (getMenu) {
+        // 第一层
+        breadcrumbs.push({ name: menu.name, path: menu.url })
+        // 第二层
+        breadcrumbs.push({ name: getMenu.name, path: getMenu.url })
+        return getMenu
+      }
+    } else if (menu.type === 2 && menu.url === currentPath) {
+      return menu
+    }
+  }
+
+  return breadcrumbs
+}
+
+
+// 处理刷新页面左侧栏点击之后 通过当前页面的url去获取相对应的那一栏的ID 刷新之后左侧菜单栏就是动态的
+export function pathMapToMenu (userMenus: any[], currentPath: string): any {
+  for (const menu of userMenus) {
+    if (menu.type === 1) {
+      // menu.children如果为空 对空数组进行遍历
+      const getMenu = pathMapToMenu(menu.children ?? [], currentPath)
+      if (getMenu) {
+        return getMenu
+      }
+    } else if (menu.type === 2 && menu.url === currentPath) {
+      return menu
+    }
+  }
+}
+
+export { firstMenu }

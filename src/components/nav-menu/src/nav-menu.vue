@@ -1,8 +1,8 @@
 <!--
  * @Author: xiaoxinYy 3037686283@qq.com
  * @Date: 2023-02-22 14:53:09
- * @LastEditors: xiaoxinYy 3037686283@qq.com
- * @LastEditTime: 2023-02-23 13:24:11
+ * @LastEditors: Crayon 3037686283@qq.com
+ * @LastEditTime: 2023-03-01 17:19:36
  * @FilePath: \manager_vue3\manager_-system\src\components\nav-menu\src\nav-menu.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,7 +13,7 @@
       <span v-if="!collapse" class="title">Vue3+TS</span>
     </div>
     <el-menu
-        default-active="2"
+        :default-active="defaultValue"
         class="el-menu-vertical"
         :collapse="collapse"
         background-color="#0c2135"
@@ -51,9 +51,11 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 import { useStore } from '@/store'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+
+import { pathMapToMenu } from '@/utils/map-menus'
 
 export default defineComponent({
   props: {
@@ -63,20 +65,32 @@ export default defineComponent({
     }
   },
   setup() {
+    // store
     const store = useStore()
     // 通过vuex获取菜单
     const userMenus = computed(() => store.state.login.userMenus)
 
+    // router
     const router = useRouter()
+    // 获取当前页面的路径
+    const route = useRoute()
+    const currentPath = route.path
 
+    // 刷新页面左侧菜单栏选中的某项data
+    const menu = pathMapToMenu(userMenus.value, currentPath)
+    const defaultValue = ref(menu.id + '')
+
+
+    // event handle
     const handleMenuItemClick = (item: any) => {
-      console.log(item)
+      console.log(item, 'item')
       router.push({
         path: item.url ?? '/not-found'
       })
     }
 
     return {
+      defaultValue,
       userMenus,
       handleMenuItemClick
     }

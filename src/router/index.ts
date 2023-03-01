@@ -1,8 +1,8 @@
 /*
  * @Author: xiaoxinYy 3037686283@qq.com
  * @Date: 2023-02-19 12:11:34
- * @LastEditors: xiaoxinYy 3037686283@qq.com
- * @LastEditTime: 2023-02-23 10:00:48
+ * @LastEditors: Crayon 3037686283@qq.com
+ * @LastEditTime: 2023-03-01 17:31:44
  * @FilePath: \manager_vue3\manager_-system\src\router\index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -10,6 +10,8 @@ import { createRouter, createWebHashHistory } from "vue-router"
 
 // 这里的RouteRecordRaw类型是从createRouter(函数里面已经定义好get到的)
 import type { RouteRecordRaw } from 'vue-router'
+
+import { firstMenu } from "@/utils/map-menus"
 
 import localCache from '@/utils/cache'
 
@@ -48,10 +50,13 @@ router.beforeEach((to) => {
       return '/login'
     }
   }
-  console.log(router.getRoutes())
+  // console.log(router.getRoutes())
 
-  console.log(to, 'to')
-
+  // console.log(to, 'to')
+  if (to.path === '/main') {
+    // 处理当路径只有main的时候
+    return firstMenu.url
+  }
 })
 
 export default router

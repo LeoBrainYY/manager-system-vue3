@@ -1,8 +1,8 @@
 <!--
  * @Author: xiaoxinYy 3037686283@qq.com
  * @Date: 2023-02-22 17:55:24
- * @LastEditors: xiaoxinYy 3037686283@qq.com
- * @LastEditTime: 2023-02-23 14:04:56
+ * @LastEditors: Crayon 3037686283@qq.com
+ * @LastEditTime: 2023-03-01 18:16:39
  * @FilePath: \manager_vue3\manager_-system\src\components\nav-header\src\nav-header.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,7 +13,7 @@
       :class="isFold ?  'el-icon-s-fold' : 'el-icon-s-unfold'"
       @click="handleFoldClick"></i>
     <div class="content">
-      <div>面包屑</div>
+      <crayon-breadcrumb></crayon-breadcrumb>
       <div>
         <el-dropdown @command="handleCommandClcik">
           <span class="el-dropdown-link">
@@ -41,8 +41,12 @@
 import { ArrowDown } from '@element-plus/icons-vue'
 import { defineComponent, ref, computed } from 'vue'
 import { useStore } from '@/store'
+import CrayonBreadcrumb, { IBreadcrumb } from '@/base-ui/breadcrumb'
 export default defineComponent({
   emits: ['foldChange'],
+  components: {
+    CrayonBreadcrumb
+  },
   setup(props, { emit }) {
     const { origin, pathname } = location
 
@@ -51,7 +55,8 @@ export default defineComponent({
     const name = computed(() => store.state.login.userInfo.name)
     const isFold = ref(false)
 
-    // const command = ref('')
+    // 面包屑数据: [{ name: '', path: ''}]
+    // const
 
     const handleFoldClick = () => {
       isFold.value = !isFold.value
