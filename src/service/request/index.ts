@@ -1,8 +1,8 @@
 /*
  * @Author: xiaoxinYy 3037686283@qq.com
  * @Date: 2023-02-19 20:49:19
- * @LastEditors: xiaoxinYy 3037686283@qq.com
- * @LastEditTime: 2023-02-22 13:55:32
+ * @LastEditors: Crayon 3037686283@qq.com
+ * @LastEditTime: 2023-03-03 11:27:12
  * @FilePath: \manager_vue3\manager_-system\src\service\request\index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -76,7 +76,7 @@ class CrayonRequest {
   }
 
   // 单独请求拦截
-  request<T> (config: CrayonRequestConfig<T>): Promise<T> {
+  request<T = any> (config: CrayonRequestConfig<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       // 同一个实例的部分请求的拦截器
       // 部分请求的请求拦截
@@ -117,19 +117,19 @@ class CrayonRequest {
     })
   }
 
-  get<T> (config: CrayonRequestConfig<T>): Promise<T> {
+  get<T = any> (config: CrayonRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'GET' })
   }
 
-  post<T> (config: CrayonRequestConfig<T>): Promise<T> {
+  post<T = any> (config: CrayonRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'POST' })
   }
 
-  delete<T> (config: CrayonRequestConfig<T>): Promise<T> {
+  delete<T = any> (config: CrayonRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'DELETE' })
   }
 
-  patch<T> (config: CrayonRequestConfig<T>): Promise<T> {
+  patch<T = any> (config: CrayonRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'PATCH' })
   }
 }

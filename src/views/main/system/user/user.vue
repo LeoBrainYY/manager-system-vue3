@@ -2,7 +2,7 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-02-23 00:09:26
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-02-26 21:25:41
+ * @LastEditTime: 2023-03-03 17:52:57
  * @FilePath: \manager_vue3\manager_-system\src\views\main\system\user\user.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -16,24 +16,97 @@
         :itemStyle="itemStyle"
         :colLayout="colLayout"></crayon-form> -->
         <!-- 注意配置的写法 v-bind -->
-        <crayon-form v-bind="formConfig"></crayon-form>
+        <!-- 这里使用的是双向绑定 然后子组件监听表单变化 还有一种方法就是把数据传递到子组件 -->
+        <!-- 双向绑定表单数据 -->
+        <!-- <crayon-form v-bind="formConfig" v-model="formData">
+          <template #header>
+            <h1 style="padding: 30px 0">高级检索</h1>
+          </template>
+          <template #footer>
+            <div class="handle-btn">
+              <el-button icon="el-icon-refresh">重置</el-button>
+              <el-button type="primary" icon="el-icon-search">搜索</el-button>
+            </div>
+          </template>
+        </crayon-form> -->
+        <!-- <crayon-form v-bind="formConfig" :formData="formData"></crayon-form> -->
+        <page-search :formConfig="formConfig"></page-search>
+        <div class="content">
+          <crayon-table
+            :listData="userList"
+            :propList="propList"
+            :showIndexColumn="showIndexColumn"
+            :showSelectColumn="showSelectColumn">
+            <template #status="scope">
+              <el-button size="mini" :type="scope.row.enable ? 'success' : 'danger'">{{ scope.row.enable ? '启用' : '禁用' }}</el-button>
+            </template>
+            <template #createAt="scope">
+              <strong>{{ $filters.formatTime(scope.row.createAt) }}</strong>
+            </template>
+            <template #updateAt="scope">
+              <strong>{{ $filters.formatTime(scope.row.createAt) }}</strong>
+            </template>
+            <template #handler>
+              <div>
+                <el-button icon="el-icon-edit" size="mini" type="text">编辑</el-button>
+                <el-button icon="el-icon-delete" size="mini" type="text">删除</el-button>
+              </div>
+            </template>
+          </crayon-table>
+        </div>
     </div>
     <div class="content"></div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import CrayonForm, { IForm } from '@/base-ui/form'
+import { defineComponent, computed } from 'vue'
+import { useStore } from '@/store'
+// import CrayonForm from '@/base-ui/form'
 import { formConfig } from './config/search.config'
-// import CrayonForm, { IFormItem, IForm } from '@/base-ui/form'
+import PageSearch from '@/components/page-search'
+import CrayonTable from '@/base-ui/table'
 
 export default defineComponent({
   name: 'user',
   components: {
-    CrayonForm
+    // CrayonForm
+    PageSearch,
+    CrayonTable
   },
   setup() {
+
+    const store = useStore()
+    store.dispatch('system/getPageListAction', {
+      pageUrl: '/users/list',
+      queryInfo: {
+        offset: 0,
+        size: 10
+      }
+    })
+
+    const userList = computed(() => store.state.system.userList)
+    const userCount = computed(() => store.state.system.userCount)
+    // console.log(userList, userCount)
+
+    const propList = [
+      { prop: 'name', label: '用户名', minWidth: '100' },
+      { prop: 'realname', label: '真实姓名', minWidth: '100' },
+      { prop: 'cellphone', label: '手机号码', minWidth: '100' },
+      { prop: 'enable', label: '状态', minWidth: '100', slotName: 'status' },
+      { prop: 'createAt', label: '创建时间', minWidth: '250', slotName: 'createAt' },
+      { prop: 'updateAt', label: '更新时间', minWidth: '250', slotName: 'updateAt' },
+      { label: '操作', minWidth: '120', slotName: 'handler'}
+    ]
+
+    // 是否显示序号
+    const showIndexColumn = true
+    // 是否显示可选中
+    const showSelectColumn = true
+
+    // const getSelectionData = (value: any) => {
+    //   // console.log(value, '1')
+    // }
     // const formItems: IFormItem[] = [
     //   {
     //     type: 'input',
@@ -124,6 +197,10 @@ export default defineComponent({
     // }
 
     return {
+      showSelectColumn,
+      showIndexColumn,
+      propList,
+      userList,
       formConfig
     }
 
@@ -138,4 +215,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
+  .content {
+    padding: 20px;
+    border-top: 20px solid #f5f5f5;
+  }
 </style>

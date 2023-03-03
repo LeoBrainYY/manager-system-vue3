@@ -2,7 +2,7 @@
  * @Author: xiaoxinYy 3037686283@qq.com
  * @Date: 2023-02-22 17:55:24
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-03-01 18:16:39
+ * @LastEditTime: 2023-03-02 15:17:07
  * @FilePath: \manager_vue3\manager_-system\src\components\nav-header\src\nav-header.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,7 +13,7 @@
       :class="isFold ?  'el-icon-s-fold' : 'el-icon-s-unfold'"
       @click="handleFoldClick"></i>
     <div class="content">
-      <crayon-breadcrumb></crayon-breadcrumb>
+      <crayon-breadcrumb :breadcrumbs="breadcrumbs"></crayon-breadcrumb>
       <div>
         <el-dropdown @command="handleCommandClcik">
           <span class="el-dropdown-link">
@@ -41,7 +41,10 @@
 import { ArrowDown } from '@element-plus/icons-vue'
 import { defineComponent, ref, computed } from 'vue'
 import { useStore } from '@/store'
+import { useRoute } from 'vue-router'
 import CrayonBreadcrumb, { IBreadcrumb } from '@/base-ui/breadcrumb'
+
+import { pathMapToBreadCrumb } from '@/utils/map-menus'
 export default defineComponent({
   emits: ['foldChange'],
   components: {
@@ -51,12 +54,19 @@ export default defineComponent({
     const { origin, pathname } = location
 
     const store = useStore()
+    const route = useRoute()
 
     const name = computed(() => store.state.login.userInfo.name)
     const isFold = ref(false)
 
     // 面包屑数据: [{ name: '', path: ''}]
-    // const
+    const breadcrumbs = computed(() => {
+      // 路径或者userMenus发生改变 会重新计算
+      // 点击左侧菜单栏 面包屑会相应的进行改变
+      const userMenus = store.state.login.userMenus
+      const currentPath = route.path
+      return pathMapToBreadCrumb(userMenus, currentPath)
+    })
 
     const handleFoldClick = () => {
       isFold.value = !isFold.value
@@ -71,6 +81,7 @@ export default defineComponent({
     }
 
     return {
+      breadcrumbs,
       isFold,
       name,
       handleFoldClick,
