@@ -2,12 +2,20 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-03-03 15:09:35
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-03-03 17:27:22
+ * @LastEditTime: 2023-03-04 00:46:18
  * @FilePath: \manager_vue3\manager_-system\src\base-ui\table\src\table.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div>
+    <div class="header">
+      <slot name="header">
+        <div class="title">{{ title }}</div>
+        <div class="handler">
+          <slot name="headerHandler"></slot>
+        </div>
+      </slot>
+    </div>
     <el-table
       :data="listData"
       border
@@ -35,6 +43,9 @@
         </el-table-column>
       </template>
     </el-table>
+    <div class="footer">
+      <slot name="footer"></slot>
+    </div>
   </div>
 </template>
 
@@ -42,6 +53,10 @@
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: {
+    title: {
+      type: String,
+      default: ''
+    },
     listData: {
       type: Array,
       required: true
@@ -75,5 +90,29 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style scoped lang="less">
+.header {
+  display: flex;
+  height: 45px;
+  padding: 0 5px;
+  justify-content: space-between;
+  align-items: center;
+
+  .title {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .handler {
+    align-items: center;
+  }
+}
+
+.footer {
+  margin-top: 15px;
+
+  .el-pagination {
+    text-align: right;
+  }
+}
 </style>

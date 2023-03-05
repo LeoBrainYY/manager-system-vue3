@@ -2,7 +2,7 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-02-23 00:09:26
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-03-03 17:52:57
+ * @LastEditTime: 2023-03-04 00:46:51
  * @FilePath: \manager_vue3\manager_-system\src\views\main\system\user\user.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -33,10 +33,18 @@
         <page-search :formConfig="formConfig"></page-search>
         <div class="content">
           <crayon-table
+            :title="title"
             :listData="userList"
             :propList="propList"
             :showIndexColumn="showIndexColumn"
             :showSelectColumn="showSelectColumn">
+            <!-- header中的插槽 -->
+            <template #headerHandler>
+              <el-button
+                @click="handleNewUsaer"
+                type="primary">新建用户</el-button>
+            </template>
+            <!-- 列中的插槽 -->
             <template #status="scope">
               <el-button size="mini" :type="scope.row.enable ? 'success' : 'danger'">{{ scope.row.enable ? '启用' : '禁用' }}</el-button>
             </template>
@@ -89,6 +97,8 @@ export default defineComponent({
     const userCount = computed(() => store.state.system.userCount)
     // console.log(userList, userCount)
 
+    const title = '用户列表'
+
     const propList = [
       { prop: 'name', label: '用户名', minWidth: '100' },
       { prop: 'realname', label: '真实姓名', minWidth: '100' },
@@ -103,6 +113,10 @@ export default defineComponent({
     const showIndexColumn = true
     // 是否显示可选中
     const showSelectColumn = true
+
+    const handleNewUsaer = () => {
+      return 0
+    }
 
     // const getSelectionData = (value: any) => {
     //   // console.log(value, '1')
@@ -197,6 +211,8 @@ export default defineComponent({
     // }
 
     return {
+      handleNewUsaer,
+      title,
       showSelectColumn,
       showIndexColumn,
       propList,
