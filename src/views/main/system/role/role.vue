@@ -30,7 +30,6 @@ export default defineComponent({
   },
   setup() {
     return {
-      console.log('test')
       formConfig,
       contentTableConfig
     }
