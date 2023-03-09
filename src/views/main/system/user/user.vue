@@ -33,7 +33,7 @@
         <page-search :formConfig="formConfig"></page-search>
         <page-content
           :contentTableConfig="contentTableConfig"
-          pageName="user"></page-content>
+          pageName="users"></page-content>
     </div>
     <div class="content"></div>
   </div>
