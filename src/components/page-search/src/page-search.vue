@@ -2,7 +2,7 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-03-03 10:13:33
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-03-09 18:59:34
+ * @LastEditTime: 2023-03-10 17:13:38
  * @FilePath: \manager_vue3\manager_-system\src\components\page-search\src\page-search.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -15,7 +15,7 @@
       <template #footer>
         <div class="handle-btn">
           <el-button icon="el-icon-refresh" @click="handleResetClick">重置</el-button>
-          <el-button type="primary" icon="el-icon-search">搜索</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="handleQueryClick">搜索</el-button>
         </div>
       </template>
     </crayon-form>
@@ -47,7 +47,19 @@ export default defineComponent({
 
     // reset
     const handleResetClick = () => {
-      formData.value = formOriginData
+      for (const key in formOriginData) {
+        // formData.value[`${key}`] = ''
+        // formData.value[`${key}`] = formOriginData[key]
+        formData.value = formOriginData
+      }
+      // formData.value = formOriginData
+      // console.log(formData.value, 'data')
+    }
+
+    // search
+    const handleQueryClick = () => {
+      console.log();
+
     }
 
     // const formData = ref({
@@ -60,7 +72,8 @@ export default defineComponent({
 
     return {
       formData,
-      handleResetClick
+      handleResetClick,
+      handleQueryClick
     }
   }
 })

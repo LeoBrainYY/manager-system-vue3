@@ -2,7 +2,7 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-02-23 15:15:43
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-03-03 10:06:26
+ * @LastEditTime: 2023-03-10 17:22:20
  * @FilePath: \manager_vue3\manager_-system\src\base-ui\form\src\form.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -24,14 +24,17 @@
                   :placeholder="item.placeholder"
                   :show-password="item.type === 'password'"
                   v-bind="item.otherOptions"
-                  v-model="formData[`${item.field}`]"></el-input>
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:modelValue="handleValueChange($event, item.field)"></el-input>
+                  <!-- handleValueChange第一个参数 改变的值 第二个参数 相对应的字段 -->
               </template>
               <template v-else-if="item.type === 'select'">
                 <el-select
                   :placeholder="item.placeholder"
                   style="width: 100%"
                   v-bind="item.otherOptions"
-                  v-model="formData[`${item.field}`]">
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:modelValue="handleValueChange($event, item.field)">
                   <el-option v-for="option in item.options" :value="option.value" :key="option.value">
                     {{ option.title }}
                   </el-option>
@@ -42,7 +45,8 @@
                 <el-date-picker
                   style="width: 100%"
                   v-bind="item.otherOptions"
-                  v-model="formData[`${item.field}`]"></el-date-picker>
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:modelValue="handleValueChange($event, item.field)"></el-date-picker>
               </template>
             </el-form-item>
           </el-col>
@@ -94,17 +98,24 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, {emit}) {
-    // 相当于复制了一份(深拷贝)
-    const formData = ref({ ...props.modelValue })
 
-    watch(formData, (newValue) => {
-      // console.log(123)
 
-      emit('update:modelValue', newValue)
-    }, { deep: true })
+    // // 相当于复制了一份(浅拷贝)
+    // const formData = ref({ ...props.modelValue })
+
+    // watch(formData, (newValue) => {
+    //   // console.log(123)
+
+    //   emit('update:modelValue', newValue)
+    // }, { deep: true })
+
+    const handleValueChange = (value: any, field: string) => {
+      // 发出事件 父组件怎么接收的??????????????????
+      emit('update:modelValue', { ...props.modelValue, [field]: value })
+    }
 
     return {
-      formData
+      handleValueChange
     }
   }
 })
