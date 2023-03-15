@@ -2,7 +2,7 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-02-23 00:09:26
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-03-08 19:02:07
+ * @LastEditTime: 2023-03-10 23:27:10
  * @FilePath: \manager_vue3\manager_-system\src\views\main\system\user\user.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -30,10 +30,14 @@
           </template>
         </crayon-form> -->
         <!-- <crayon-form v-bind="formConfig" :formData="formData"></crayon-form> -->
-        <page-search :formConfig="formConfig"></page-search>
+        <page-search
+          :formConfig="formConfig"
+          @resetBtnClick="handleResetClick"
+          @queryBtnClick="handleQueryClick"></page-search>
         <page-content
           :contentTableConfig="contentTableConfig"
-          pageName="users"></page-content>
+          pageName="users"
+          ref="pageContentRef"></page-content>
     </div>
     <div class="content"></div>
   </div>
@@ -49,6 +53,8 @@ import { contentTableConfig } from './config/content.config'
 import PageSearch from '@/components/page-search'
 import PageContent from '@/components/page-content'
 
+import { usePageSearch } from '@/hooks/use-page-search'
+
 export default defineComponent({
   name: 'user',
   components: {
@@ -60,9 +66,9 @@ export default defineComponent({
 
     // console.log(userList, userCount)
 
-    const handleNewUsaer = () => {
-      return 0
-    }
+    // const handleNewUsaer = () => {
+    //   return 0
+    // }
 
     // const getSelectionData = (value: any) => {
     //   // console.log(value, '1')
@@ -156,10 +162,14 @@ export default defineComponent({
     //   }
     // }
 
+  const [pageContentRef, handleResetClick, handleQueryClick] = usePageSearch()
+
     return {
-      handleNewUsaer,
       formConfig,
-      contentTableConfig
+      contentTableConfig,
+      pageContentRef,
+      handleResetClick,
+      handleQueryClick
     }
 
     // return {

@@ -2,7 +2,7 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-03-03 15:09:35
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-03-06 15:22:55
+ * @LastEditTime: 2023-03-11 10:43:55
  * @FilePath: \manager_vue3\manager_-system\src\base-ui\table\src\table.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -46,12 +46,12 @@
     <div class="footer">
       <slot name="footer">
         <el-pagination
-          :page-sizes="[10, 20, 30, 40]"
+          :page-sizes="[10, 20, 30]"
           :small="small"
           :disabled="disabled"
           :background="background"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="listCount"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         />
@@ -71,6 +71,10 @@ export default defineComponent({
     listData: {
       type: Array,
       required: true
+    },
+    listCount: {
+      type: Number,
+      default: 0
     },
     propList: {
       type: Array,

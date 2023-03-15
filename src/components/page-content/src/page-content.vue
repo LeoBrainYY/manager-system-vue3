@@ -2,7 +2,7 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-03-08 17:52:48
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-03-08 19:51:01
+ * @LastEditTime: 2023-03-11 10:40:43
  * @FilePath: \manager_vue3\manager_-system\src\components\page-content\src\page-content.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -10,6 +10,7 @@
   <div class="page-content">
     <crayon-table
       :listData="dataList"
+      :listCount="dataCount"
       v-bind="contentTableConfig">
       <!-- header中的插槽 -->
       <template #headerHandler>
@@ -57,13 +58,18 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
-    store.dispatch('system/getPageListAction', {
-      pageName: props.pageName,
-      queryInfo: {
-        offset: 0,
-        size: 10
-      }
-    })
+    // 发送网络请求 请求页面数据
+    const getPageData = (queryInfo: any = {}) => {
+      store.dispatch('system/getPageListAction', {
+        pageName: props.pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10,
+          ...queryInfo
+        }
+      })
+    }
+    getPageData()
 
     // getters中获取数据
     const dataList = computed(() => {
@@ -71,10 +77,14 @@ export default defineComponent({
     })
 
     // state中获取数据
-    // const userCount = computed(() => store.state.system.userCount)
+    const dataCount = computed(() => {
+      return store.getters[`system/pageListCount`](props.pageName)
+    })
 
     return {
-      dataList
+      dataList,
+      getPageData,
+      dataCount
     }
   }
 })
