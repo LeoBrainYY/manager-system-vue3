@@ -2,7 +2,7 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-03-03 15:09:35
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-03-11 10:43:55
+ * @LastEditTime: 2023-05-06 18:11:18
  * @FilePath: \manager_vue3\manager_-system\src\base-ui\table\src\table.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -33,7 +33,7 @@
         align="center"
         width="80"></el-table-column>
       <template v-for="propItem in propList" :key="propItem.prop">
-        <el-table-column v-bind="propItem" align="center">
+        <el-table-column v-bind="propItem" align="center" show-overflow-tooltip>
           <template #default="scope">
             <!-- :row="scope.row" 把插槽中的数据传过去 -->
             <slot :name="propItem.slotName" :row="scope.row">
@@ -47,6 +47,8 @@
       <slot name="footer">
         <el-pagination
           :page-sizes="[10, 20, 30]"
+          :page-size="page.pageSize"
+          :current-page="page.currentPage"
           :small="small"
           :disabled="disabled"
           :background="background"
@@ -87,9 +89,14 @@ export default defineComponent({
     showSelectColumn: {
       type: Boolean,
       default: false
+    },
+    // 传递的分页
+    page: {
+      type: Object,
+      default: () => ({ currentPage: 0, pageSize: 10 })
     }
   },
-  emits: ['selectionChange'],
+  emits: ['selectionChange', 'update:page'],
   setup(props, { emit }) {
     // console.log(props)
 
@@ -98,7 +105,19 @@ export default defineComponent({
       emit('selectionChange', value)
     }
 
+    const handleCurrentChange = (currentPage: number) => {
+      // console.log(props.page, '...props.page')
+      // console.log(currentPage, 'currentPage')
+      emit('update:page', { ...props.page, currentPage })
+    }
+
+    const handleSizeChange = (pageSize: number) => {
+      emit('update:page', { ...props.page, pageSize })
+    }
+
     return {
+      handleSizeChange,
+      handleCurrentChange,
       handleSelectionChngae
     }
   }

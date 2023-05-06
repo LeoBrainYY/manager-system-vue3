@@ -1,3 +1,11 @@
+/*
+ * @Author: Crayon 3037686283@qq.com
+ * @Date: 2022-11-02 16:58:13
+ * @LastEditors: Crayon 3037686283@qq.com
+ * @LastEditTime: 2023-04-26 14:12:37
+ * @FilePath: \manager_vue3\manager_-system\vue.config.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 const path = require('path')
 module.exports = {
   // CLI提供的属性
@@ -7,7 +15,7 @@ module.exports = {
   devServer: {
     proxy: {
       '^/api': {
-        target: 'http://152.136.185.210:5000',
+        target: 'http://123.207.32.32:5000',
         pathRewrite: {
           '^/api': ''
         },
