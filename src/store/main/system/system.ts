@@ -2,9 +2,15 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-03-03 10:35:56
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-05-06 12:33:52
+ * @LastEditTime: 2023-05-09 01:19:24
  * @FilePath: \manager_vue3\manager_-system\src\store\main\system\system.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+
+/**
+ * 1. 通过getters获取到数据
+ * 2. actions执行mutations中的函数
+ * 3. 把数据放到state中
  */
 import { Module } from 'vuex'
 import { IRootState } from '@/store/types'
@@ -20,7 +26,9 @@ const systemModule: Module<ISystemState, IRootState> = {
       roleList: [],
       roleCount: 0,
       goodsList: [],
-      goodsCount: 0
+      goodsCount: 0,
+      menuList: [],
+      menuCount: 0
     }
   },
   mutations: {
@@ -41,6 +49,12 @@ const systemModule: Module<ISystemState, IRootState> = {
     },
     changeGoodsCount (state, goodsCount: number) {
       state.goodsCount = goodsCount
+    },
+    changeMenuCount (state, menuCount: number) {
+      state.menuCount = menuCount
+    },
+    changeMenuList (state, menuList: any[]) {
+      state.menuList = menuList
     }
   },
   getters: {
@@ -82,8 +96,8 @@ const systemModule: Module<ISystemState, IRootState> = {
 
       // 将数据存储到state
       const { list, totalCount } = pageResult.data
-      console.log(list)
-      console.log(totalCount)
+      console.log(list, '获取到的数据')
+      // console.log(totalCount)
 
       const changePageName = (pageName.slice(0, 1) as string).toUpperCase() + pageName.slice(1)
 

@@ -2,7 +2,7 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-03-03 15:09:35
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-05-06 18:11:18
+ * @LastEditTime: 2023-05-09 02:42:59
  * @FilePath: \manager_vue3\manager_-system\src\base-ui\table\src\table.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -20,7 +20,8 @@
       :data="listData"
       border
       style="width: 100%"
-      @selection-change="handleSelectionChngae">
+      @selection-change="handleSelectionChngae"
+      v-bind="childrenProps">
       <el-table-column
         v-if="showSelectColumn"
         type="selection"
@@ -43,7 +44,7 @@
         </el-table-column>
       </template>
     </el-table>
-    <div class="footer">
+    <div class="footer" v-if="showFooter">
       <slot name="footer">
         <el-pagination
           :page-sizes="[10, 20, 30]"
@@ -94,6 +95,16 @@ export default defineComponent({
     page: {
       type: Object,
       default: () => ({ currentPage: 0, pageSize: 10 })
+    },
+    // 表格点击可展开属性
+    // 直接通过v-bind绑定属性
+    childrenProps: {
+      type: Object,
+      default: () => ({})
+    },
+    showFooter: {
+      type: Boolean,
+      default: true
     }
   },
   emits: ['selectionChange', 'update:page'],

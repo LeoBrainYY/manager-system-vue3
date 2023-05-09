@@ -2,7 +2,7 @@
  * @Author: xiaoxinYy 3037686283@qq.com
  * @Date: 2023-02-23 10:05:27
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-03-02 15:19:26
+ * @LastEditTime: 2023-05-09 02:32:45
  * @FilePath: \manager_vue3\manager_-system\src\utils\map-menus.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -139,5 +139,24 @@ export function pathMapToMenu (
 //     }
 //   }
 // }
+
+export function mapMenusToPermissions (userMenus: any[]) {
+  const permission: string[] = []
+
+  const _recurseGetPermission = (menus: any[]) => {
+    for (const menu of menus) {
+      if (menu.type === 1 || menu.type === 2) {
+        _recurseGetPermission(menu.children ?? [])
+      } else if (menu.type === 3) {
+        // 获取最内层的权限数据
+        permission.push(menu.permission)
+      }
+    }
+  }
+
+  // 调用递归函数
+  _recurseGetPermission(userMenus)
+  return permission
+}
 
 export { firstMenu }

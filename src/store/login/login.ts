@@ -2,7 +2,7 @@
  * @Author: xiaoxinYy 3037686283@qq.com
  * @Date: 2023-02-21 18:56:30
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-02-26 21:38:46
+ * @LastEditTime: 2023-05-09 02:41:11
  * @FilePath: \manager_vue3\manager_-system\src\store\login\login.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -12,7 +12,7 @@ import { accountLoginRequest,
          requestUserInfoById,
          requestUserMenuByRoleId } from "@/service/login/login"
 import localCache from '@/utils/cache'
-import { mapMenusToRoutes } from '@/utils/map-menus'
+import { mapMenusToRoutes, mapMenusToPermissions } from '@/utils/map-menus'
 import router from "@/router"
 
 import { IAccount } from "@/service/login/type"
@@ -26,11 +26,12 @@ const loginModule: Module<ILoginState, IRootState> = {
     return {
       token: '',
       userInfo: {},
-      userMenus: []
+      userMenus: [],
+      permissions: []
     }
   },
   getters: {},
-  // 修改stat的唯一方式 就是通过mutations
+  // 修改state的唯一方式 就是通过mutations
   mutations: {
     changeToken (state, token: string) {
       state.token = token
@@ -38,6 +39,7 @@ const loginModule: Module<ILoginState, IRootState> = {
     changeUserInfo (state, userInfo: any) {
       state.userInfo = userInfo
     },
+    // 菜单
     changeUserMenus (state, userMenus: any) {
       state.userMenus = userMenus
 
@@ -50,6 +52,12 @@ const loginModule: Module<ILoginState, IRootState> = {
         // 注册(添加)路由
         router.addRoute('main', item)
       })
+
+      // 获取用户按钮的权限
+      const permission = mapMenusToPermissions(userMenus)
+      console.log('权限处理', permission)
+      // 存储权限信息
+      state.permissions = permission
     }
   },
   actions: {
