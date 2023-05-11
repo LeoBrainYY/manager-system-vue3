@@ -2,7 +2,7 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-03-08 17:52:48
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-05-06 17:20:57
+ * @LastEditTime: 2023-05-11 22:49:36
  * @FilePath: \manager_vue3\manager_-system\src\components\page-content\src\page-content.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -18,6 +18,7 @@
       <!-- header中的插槽 -->
       <template #headerHandler>
         <el-button
+          v-if="isCreate"
           @click="handleNewUsaer"
           type="primary">新建用户</el-button>
       </template>
@@ -33,10 +34,20 @@
       <template #updateAt="scope">
         <strong>{{ $filters.formatTime(scope.row.createAt) }}</strong>
       </template>
-      <template #handler>
+      <template #handler="scope">
         <div>
-          <el-button icon="el-icon-edit" size="mini" type="text">编辑</el-button>
-          <el-button icon="el-icon-delete" size="mini" type="text">删除</el-button>
+          <el-button
+            v-if="isUpdate"
+            icon="el-icon-edit"
+            size="mini"
+            type="text"
+            @click="handleEditClick(scope.row)">编辑</el-button>
+          <el-button
+            v-if="isDelete"
+            icon="el-icon-delete"
+            size="mini"
+            type="text"
+            @click="handleDeleteClick(scope.row)">删除</el-button>
         </div>
       </template>
       <!-- <template #image="scope">
@@ -63,6 +74,8 @@
 <script lang='ts'>
 import { defineComponent, computed, ref, watch } from 'vue'
 import { useStore } from '@/store'
+import { usePermission } from '@/hooks/use-permission'
+
 import CrayonTable from '@/base-ui/table'
 export default defineComponent({
   props: {
@@ -75,11 +88,18 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['newButtonClick', 'editButtonClick'],
   components: {
     CrayonTable
   },
-  setup(props) {
+  setup(props, { emit }) {
     const store = useStore()
+
+    // 获取操作权限
+    const isCreate = usePermission(props.pageName, 'create')
+    const isUpdate = usePermission(props.pageName, 'update')
+    const isDelete = usePermission(props.pageName, 'delete')
+    const isQuery = usePermission(props.pageName, 'query')
 
     // 1.双向绑定pageInfo
     const pageInfo = ref({ currentPage: 0, pageSize: 10 })
@@ -92,6 +112,8 @@ export default defineComponent({
 
     // 2.发送网络请求 请求页面数据
     const getPageData = (queryInfo: any = {}) => {
+      if (!isQuery) return
+
       // console.log(pageInfo.value.currentPage)
       // console.log(pageInfo.value.currentPage - 1)
       // console.log(pageInfo.value.pageSize * pageInfo.value.currentPage)
@@ -127,12 +149,37 @@ export default defineComponent({
       return true
     })
 
+    // 5. 删除
+    const handleDeleteClick = (item: any) => {
+      // 获取点击行的数据信息
+      // console.log(item)
+      store.dispatch('system/deletePageDataAction', {
+        pageName: props.pageName,
+        id: item.id
+      })
+    }
+
+    //
+    const handleNewUsaer = () => {
+      emit('newButtonClick')
+    }
+
+    const handleEditClick = (item: any) => {
+      emit('editButtonClick', item)
+    }
+
     return {
       dataList,
       getPageData,
       dataCount,
       pageInfo,
-      otherPropsSlots
+      otherPropsSlots,
+      isCreate,
+      isUpdate,
+      isDelete,
+      handleDeleteClick,
+      handleNewUsaer,
+      handleEditClick
     }
   }
 })

@@ -2,7 +2,7 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-02-26 21:22:47
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-03-10 17:28:45
+ * @LastEditTime: 2023-05-10 05:20:37
  * @FilePath: \manager_vue3\manager_-system\src\views\main\system\user\config\search.config.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */

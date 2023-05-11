@@ -2,7 +2,7 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-02-23 15:15:43
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-03-10 17:22:20
+ * @LastEditTime: 2023-05-12 05:13:33
  * @FilePath: \manager_vue3\manager_-system\src\base-ui\form\src\form.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -16,6 +16,7 @@
         <template v-for="item in formItems" :key="item.label">
           <el-col v-bind="colLayout">
             <el-form-item
+              v-if="!item.isHidden"
               :label="item.label"
               :rules="item.rules"
               :style="itemStyle">

@@ -2,12 +2,13 @@
  * @Author: Crayon 3037686283@qq.com
  * @Date: 2023-03-03 10:35:56
  * @LastEditors: Crayon 3037686283@qq.com
- * @LastEditTime: 2023-05-09 01:19:24
+ * @LastEditTime: 2023-05-10 23:32:38
  * @FilePath: \manager_vue3\manager_-system\src\store\main\system\system.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
 /**
+ * dispatch --> action
  * 1. 通过getters获取到数据
  * 2. actions执行mutations中的函数
  * 3. 把数据放到state中
@@ -15,7 +16,8 @@
 import { Module } from 'vuex'
 import { IRootState } from '@/store/types'
 import { ISystemState } from './types'
-import { getPageListData } from '@/service/main/system/system'
+import { getPageListData, deletePageData } from '@/service/main/system/system'
+import { ElMessage } from 'element-plus'
 
 const systemModule: Module<ISystemState, IRootState> = {
   namespaced: true,
@@ -114,6 +116,36 @@ const systemModule: Module<ISystemState, IRootState> = {
       //     commit(`changeRoleCount`, totalCount)
       //     break
       // }
+    },
+    async deletePageDataAction (context, payload: any) {
+      // 需要两个参数获取删除的页面 和 id
+      // 1. pageName -> /users/id
+      // 2. id -> /users/id
+      const { pageName, id } = payload
+      const pageUrl = `/${pageName}/${id}`
+      // 执行删除函数(参数为url)
+      const res = await deletePageData(pageUrl)
+      // console.log(res, 'res')
+      if (res.code === -1002) {
+        ElMessage({
+          message: res.data,
+          type: 'warning'
+        })
+      } else {
+        ElMessage({
+          message: 'delete successful',
+          type: 'success'
+        })
+      }
+
+      // 重新请求数据
+      context.dispatch('getPageListAction', {
+        pageName: pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10
+        }
+      })
     }
   }
 }
